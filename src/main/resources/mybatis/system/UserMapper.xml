@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+
+	<resultMap type="User" id="loginUser">
+		<id column="id" property="id"/>
+		<result column="loginname" property="loginname"/>
+		<result column="password" property="password"/>
+		<result column="username" property="username"/>
+		<result column="salt" property="salt"/>
+	</resultMap>
+	
+
+	<select id="findUserByLoginname" parameterType="java.lang.String" resultMap="loginUser">
+		select * from SYS_USER
+		where 1=1
+		<if test="_parameter!=null">
+			and loginname=#{_parameter}
+		</if>
+	</select>
+	
+	<select id="findUsersByPage" parameterType="java.util.Map" resultMap="loginUser">
+	    select * from SYS_USER
+	    where 1=1
+	    <if test="loginname!=null">
+	        and loginname like concat(concat('%', #{loginname}), '%')
+	    </if>
+	    <if test="username!=null">
+	        and username like concat(concat('%', #{username}), '%')
+	    </if>
+	</select>
+
+	<insert id="addUser" parameterType="java.util.Map" flushCache="false">
+	    insert into SYS_USER(
+	    	id,
+	    	loginname,
+	    	username,
+	    	password,
+	    	salt
+	    )
+	    values(
+	    	#{id},
+	    	#{loginname},
+	    	#{username},
+	    	#{password},
+	    	#{salt}
+	    )
+	</insert>
+	
+	<update id="editUser" parameterType="java.util.Map" flushCache="false">
+	    update SYS_USER set
+	    loginname=#{loginname},
+	    username=#{username}
+	    where id=#{id}
+	</update>
+	
+	<update id="editPwd" parameterType="java.util.Map" flushCache="false">
+	    update SYS_USER set
+	    password=#{password},
+	    salt=#{salt}
+	    where id=#{id}
+	</update>
+	
+	<delete id="rmvUser" parameterType="java.util.Map">
+	    delete from SYS_USER
+	    where id=#{id}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,87 @@
+@CHARSET "UTF-8";
+
+body {
+	margin: 0px;
+	padding: 0px;
+	height: 100%;
+	background: url("../image/bg.jpg") 50% 50%/cover no-repeat fixed;
+}
+
+.account-flex-container {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.account-container {
+	position: relative;
+	z-index: 1001;
+	width: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 30px 40px 20px;
+	border-radius: 10px;
+	background-color: #fff;
+}
+
+.account-container h2 {
+    margin: 0 0 25px;
+    font-size: 25px;
+    font-weight: 400;
+    text-align: center;
+    color: #323a45;
+}
+
+.account-input {
+    position: relative;
+    height: 68px;
+}
+
+.account-input input {
+    height: 48px;
+    width: 370px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    border: 1px solid rgba(50,58,69,.2);
+    border-radius: 5px;
+}
+
+.captcha input {
+    width: 275px;
+    padding-right: 110px;
+}
+
+.captcha img {
+    position: absolute;
+    right: 4px;
+    top: 6px;
+    height: 40px;
+    width: 95px;
+    cursor: pointer;
+}
+
+.account-container button {
+    width: 400px;
+    height: 48px;
+    border: none;
+    background-color: #323a45;
+    color: #fff;
+    font-size: 24px;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: opacity .2s ease;
+}
+
+.account-container button[disabled] {
+    opacity: .5!important;
+    cursor: not-allowed!important;
+}
+
+.account-container button:hover {
+	opacity: 0.9;
+}
