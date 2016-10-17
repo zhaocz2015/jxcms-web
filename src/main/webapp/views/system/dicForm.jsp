@@ -22,6 +22,12 @@
 				<input name="name" class="easyui-textbox" required="true" missingMessage="请输入字典名称" prompt="请输入字典名称" style="width:160px;"/>
 			</td>
 		</tr>
+		<tr>
+			<th>字典类型</th>
+			<td>
+				<input name="type" class="easyui-combobox" url="dic/dicCmblist?code=DIC_TYPE" required="true" missingMessage="请选择字典类型" prompt="请选择字典类型" style="width:160px;" panelHeight="auto"/>
+			</td>
+		</tr>
 	</table>
 </form>
 

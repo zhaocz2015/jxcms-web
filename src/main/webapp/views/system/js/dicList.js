@@ -16,22 +16,30 @@ var urls = {
 	edit : "dic/editDic",
 	rmv : "dic/rmvDic",
 
-	form : "dic/itemForm",
-	list : "dic/itemList",
-	add : "dic/addItem",
-	edit : "dic/editItem",
-	rmv : "dic/rmvItem",
+	itemForm : "dic/itemForm",
+	itemList : "dic/itemList",
+	itemTree : "dic/itemTree",
+	addItem : "dic/addItem",
+	editItem : "dic/editItem",
+	rmvItem : "dic/rmvItem",
 };
 
 var modes = {
 	add : "add",
 	edit : "edit",
-	rmv : "rmv"
+	rmv : "rmv",
+	
+	addItem: "addItem",
+	editItem: "editItem",
+	rmvItem: "rmvItem"
+	
 };
 
+var dicLayout;
 var dg, tb, form;
 var itemDg, itemTb, itemForm;
 function initVars() {
+	dicLayout = $("#dicLayout");
 	tb = $("#tb");
 	dg = $("#dg");
 	
@@ -64,20 +72,107 @@ function initDataGrid() {
 			title : "名称",
 			field : "name",
 			width : 160
-		} ] ]
+		}, {
+			title : "类型",
+			field : "type",
+			width : 160
+		} ] ],
+		onSelect: function(index, row){
+			initItemGrid(row);
+//			itemDg.datagrid("load", {dicid: row.id});
+		}
 	});
 }
 
-function initItemGrid() {
+function initItemGrid(row) {
+	dicLayout.layout("panel", "east").panel("body").empty().append("<table id='dg_item'></table>");
+	itemDg = $("#dg_item");
+	if(!row || row.type==0){
+		initItemList(row);
+	}else{
+		initItemTree(row);
+	}
+}
+
+function initItemList(row){
 	itemDg.datagrid({
 		fit : true,
 		striped : true,
 		singleSelect : true,
 		rownumbers : true,
 		toolbar : itemTb,
-		url : urls.itemlist,
+		url : urls.itemList,
 		loadMsg : "正在加载，请稍候",
-		pagination : true,
+		queryParams:{
+			dicid: row ? row.id : ""
+		},
+		toolbar: [{
+			text: "添加",
+			iconCls: "icon-add",
+			handler: function(){
+				addItemWin();
+			}
+		},{
+			text: "编辑",
+			iconCls: "icon-edit",
+			handler: function(){
+				editItemWin()
+			}
+		},{
+			text: "删除",
+			iconCls: "icon-remove",
+			handler: function(){
+				rmvItem()
+			}
+		}],
+		columns : [ [ {
+			field : "id",
+			checkbox : true
+		}, {
+			title : "名称",
+			field : "name",
+			width : 140
+		}, {
+			title : "值集",
+			field : "val",
+			width : 160
+		} ] ]
+	});
+}
+
+function initItemTree(row){
+	itemDg.treegrid({
+		fit : true,
+		striped : true,
+		singleSelect : true,
+		rownumbers : true,
+		toolbar : itemTb,
+		idField: "id",
+		treeField: "name",
+		url : urls.itemTree,
+		loadMsg : "正在加载，请稍候",
+		queryParams:{
+			dicid: row ? row.id : ""
+		},
+		toolbar: [{
+			text: "添加",
+			iconCls: "icon-add",
+			handler: function(){
+				addItemWin();
+			}
+		},{
+			text: "编辑",
+			iconCls: "icon-edit",
+			handler: function(){
+				editItemWin()
+			}
+		},{
+			text: "删除",
+			iconCls: "icon-remove",
+			handler: function(){
+				rmvItem()
+			}
+		}],
 		columns : [ [ {
 			field : "id",
 			checkbox : true
@@ -189,7 +284,7 @@ function rmvRecord() {
 		return;
 	}
 
-	showConfirm("删除提示", "是否删除用户【" + row.username + "】的数据记录？", function(r) {
+	showConfirm("删除提示", "是否删除数据字典【" + row.name + "】的数据记录？", function(r) {
 		if (r) {
 			showProgress("正在请求");
 			$.post(urls.rmv, {
@@ -208,27 +303,125 @@ function rmvRecord() {
 	});
 }
 
-function resetPwd() {
+
+function addItemWin() {
 	var row = dg.datagrid("getSelected");
 	if (!row) {
-		showAlert("请选择一条记录");
+		showAlert("请选择一条数据字典记录");
+		return;
+	}
+	
+	showWin({
+		title : "新增窗口",
+		width : 300,
+		height : 260,
+		href : urls.itemForm,
+		buttons : [ {
+			text : "确定",
+			iconCls : "icon-ok",
+			handler : function() {
+				submitForm(modes.addItem);
+			}
+		}, {
+			text : "取消",
+			iconCls : "icon-cancel",
+			handler : function() {
+				$win.dialog("close");
+			}
+		} ],
+		onLoad : function() {
+			form = $win.find("#userForm");
+			form.find("#dicid").val(row.id);
+			
+			if(row.type == 0){
+				form.find("tr.pnode").hide();
+			}else{
+				form.find("tr.pnode").show();
+				form.find("#pid").combotree({
+					url: "dic/dicCmbtree?code=" + row.code
+				});
+			}
+		}
+	});
+}
+
+function editItemWin() {
+
+	var row = dg.datagrid("getSelected");
+	if (!row) {
+		showAlert("请选择一条数据字典记录");
+		return;
+	}
+	
+	var irow = itemDg.datagrid("getSelected");
+	if (!irow) {
+		showAlert("请选择一条字典值集记录");
 		return;
 	}
 
-	showPrompt("重置密码", "请输入用户【" + row.username + "】的重置密码", function(pwd) {
-		if (pwd) {
+	showWin({
+		title : "编辑窗口",
+		width : 300,
+		height : 180,
+		href : urls.itemForm,
+		buttons : [ {
+			text : "确定",
+			iconCls : "icon-ok",
+			handler : function() {
+				submitForm(modes.editItem)
+			}
+		}, {
+			text : "取消",
+			iconCls : "icon-cancel",
+			handler : function() {
+				$win.dialog("close");
+			}
+		} ],
+		onLoad : function() {
+			form = $win.find("#userForm");
+			
+			if(row.type == 0){
+				form.find("tr.pnode").hide();
+				form.form("load", irow);
+			}else{
+				form.find("tr.pnode").show();
+				form.find("#pid").combotree({
+					url: "dic/dicCmbtree?code=" + row.code,
+					onLoadSuccess: function(){
+						form.form("load", irow);
+					}
+				});
+			}
+		}
+	});
+}
+
+function rmvItem() {
+	var row = dg.datagrid("getSelected");
+	if (!row) {
+		showAlert("请选择一条数据字典记录");
+		return;
+	}
+
+	var irow = itemDg.datagrid("getSelected");
+	if (!row) {
+		showAlert("请选择一条字典值集记录");
+		return;
+	}
+
+	showConfirm("删除提示", "是否删除字典值集【" + irow.name + "】的数据记录？", function(r) {
+		if (r) {
 			showProgress("正在请求");
-			$.post(urls.reset, {
-				id : row.id,
-				password : pwd
+			$.post(urls.rmvItem, {
+				id : irow.id
 			}, function(rsMsg) {
 				closeProgress();
 
 				if (rsMsg.success) {
-					dg.datagrid("reload");
-					showInfo(rsMsg.msg);
+					itemDg.datagrid("reload");
+					// showInfo(rsMsg.info);
 				} else {
-					showAlert(rsMsg.msg);
+					showAlert(rsMsg.info);
 				}
 			}, "JSON");
 		}

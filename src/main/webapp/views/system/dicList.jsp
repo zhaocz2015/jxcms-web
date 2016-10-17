@@ -7,7 +7,7 @@
 <title>用户管理</title>
 <script type="text/javascript" src="views/system/js/dicList.js"></script>
 </head>
-<body class="easyui-layout">
+<body id="dicLayout" class="easyui-layout">
 	<div region="center" title="系统字典列表">
 		<div id="tb" class="tb-css">
 			<div class="tb-css-btn">
@@ -32,15 +32,18 @@
 		</div>
 		<table id="dg"></table>
 	</div>
+	
 	<div region="east" title="字典值集列表" style="width: 50%;">
-		<div id="tb_item" class="tb-css-btn">
+		<!--
+		 <div id="tb_item" class="tb-css-btn">
 			<a class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="addItemWin()">新增</a>
 			<span class="xian"></span>
 			<a class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editItemWin()">修改</a>
 			<span class="xian"></span>
-			<a class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="rmvItemWin()">删除</a>
+			<a class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="rmvItem()">删除</a>
 		</div>
-		<table id="dg_item"></table>
+		
+		<table id="dg_item"></table> -->
 	</div>
 </body>
 </html>

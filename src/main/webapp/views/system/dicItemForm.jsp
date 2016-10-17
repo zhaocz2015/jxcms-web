@@ -13,13 +13,20 @@
 			<th>字典项名称</th>
 			<td>
 				<input name="name" class="easyui-textbox" required="true" missingMessage="请输入字典项名称" prompt="请输入字典项名称" style="width:160px;"/>
-				<input name="id" type="hidden"/>
+				<input id="id" name="id" type="hidden"/>
+				<input id="dicid" name="dicid" type="hidden"/>
 			</td>
 		</tr>
 		<tr>
 			<th>字典项值集</th>
 			<td>
 				<input name="val" class="easyui-textbox" required="true" missingMessage="请输入字典项值集" prompt="请输入字典项值集" style="width:160px;"/>
+			</td>
+		</tr>
+		<tr class="pnode">
+			<th>上级节点</th>
+			<td>
+				<input id="pid" name="pid" class="easyui-combotree" style="width:160px;"/>
 			</td>
 		</tr>
 	</table>
