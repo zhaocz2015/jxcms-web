@@ -1,6 +1,6 @@
 package com.zcz.web.core.data;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class RsTree {
@@ -10,7 +10,11 @@ public class RsTree {
 	private String state;
 	private String url;
 
-	private List<RsTree> children = new ArrayList<>();
+	private String pid;
+	private String name;
+	private int orderno;
+
+	private List<RsTree> children = new LinkedList<>();
 
 	public String getId() {
 		return id;
@@ -50,6 +54,30 @@ public class RsTree {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getOrderno() {
+		return orderno;
+	}
+
+	public void setOrderno(int orderno) {
+		this.orderno = orderno;
 	}
 
 }

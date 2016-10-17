@@ -8,9 +8,9 @@
 <script type="text/javascript" src="views/system/js/userList.js"></script>
 </head>
 <body class="easyui-layout">
-	<div region="center" title="系统用户列表">
+	<div region="center" border="false">
 		<div id="tb" class="tb-css">
-			<div class="tb-css-btn">
+			<div class="tb-css-btn" >
 				<a class="easyui-linkbutton" iconCls="icon-collapse" plain="true" onclick="toggleTb(this)"></a>
 				<span class="xian"></span>
 				<a class="easyui-linkbutton" iconCls="icon-view" plain="true" onclick="viewWin()">详情</a>

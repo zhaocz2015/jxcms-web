@@ -1,8 +1,5 @@
 package com.zcz.web.core.shiro;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.annotation.PostConstruct;
 
 import org.apache.shiro.SecurityUtils;
@@ -47,33 +44,33 @@ public class ShiroRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
-		LOGGER.info("Shiro开始登录认证");
+		LOGGER.info("ShiroR开始登录认证");
 		UserCaptchaToken token = (UserCaptchaToken) authcToken;
 		// 校验验证码
-		if (doCaptchaValidate(token)) {
-			try {
-				SysUser sysUser = userSevice.findUserByLoginname(token.getUsername());
+		// if (doCaptchaValidate(token)) {
+		try {
+			SysUser sysUser = userSevice.findUserByLoginname(token.getUsername());
 
-				// 账号不存在
-				if (sysUser == null) {
-					new UnknownAccountException();
-					return null;
-				}
-				// 账号禁用
-				// if (Const.USER_TATUS_OFF.equals(sysUser.getUserStatus())) {
-				// new DisabledAccountException();
-				// return null;
-				// }
-				ShiroUser shiroUser = new ShiroUser(sysUser.getId(), sysUser.getLoginname(), sysUser.getUsername());
-				// 认证缓存信息
-				byte[] salt = Encodes.decodeHex(sysUser.getSalt());
-				return new SimpleAuthenticationInfo(shiroUser, sysUser.getPassword().toCharArray(), ByteSource.Util.bytes(salt), getName());
-			} catch (Exception e) {
-				throw new AuthenticationException(e.getMessage());
+			// 账号不存在
+			if (sysUser == null) {
+				new UnknownAccountException();
+				return null;
 			}
-		} else {
-			return null;
+			// 账号禁用
+			// if (Const.USER_TATUS_OFF.equals(sysUser.getUserStatus())) {
+			// new DisabledAccountException();
+			// return null;
+			// }
+			ShiroUser shiroUser = new ShiroUser(sysUser.getId(), sysUser.getLoginname(), sysUser.getUsername());
+			// 认证缓存信息
+			byte[] salt = Encodes.decodeHex(sysUser.getSalt());
+			return new SimpleAuthenticationInfo(shiroUser, sysUser.getPassword().toCharArray(), ByteSource.Util.bytes(salt), getName());
+		} catch (Exception e) {
+			throw new AuthenticationException(e.getMessage());
 		}
+		// } else {
+		// return null;
+		// }
 
 	}
 
@@ -86,8 +83,8 @@ public class ShiroRealm extends AuthorizingRealm {
 		LOGGER.info("Shiro开始权限认证");
 		ShiroUser shiroUser = (ShiroUser) principals.getPrimaryPrincipal();
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-		Set<String> permCodeSet = new HashSet<String>();
-
+		// Set<String> permCodeSet = new HashSet<String>();
+		//
 		// Map<String, String> roleMap = new HashMap<String, String>();
 		// List<Map> roleIdNameList =
 		// sysRoleService.findRoleIdAndNameByUserId(shiroUser.userId);
@@ -110,11 +107,12 @@ public class ShiroRealm extends AuthorizingRealm {
 		// roleMap.put(roleId, roleName);
 		// }
 		// shiroUser.roleMap = roleMap;
-
-		// 把principals放session中 key=userId value=principals
-		SecurityUtils.getSubject().getSession().setAttribute(shiroUser.userId, SecurityUtils.getSubject().getPrincipals());
-
-		info.addStringPermissions(permCodeSet);
+		//
+		// // 把principals放session中 key=userId value=principals
+		// SecurityUtils.getSubject().getSession().setAttribute(shiroUser.userId,
+		// SecurityUtils.getSubject().getPrincipals());
+		//
+		// info.addStringPermissions(permCodeSet);
 		return info;
 	}
 

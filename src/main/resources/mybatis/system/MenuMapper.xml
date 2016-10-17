@@ -11,8 +11,72 @@
 		<result column="url" property="url"/>
 	</resultMap>
 	
-	<select id="findAllMenus" resultMap="sysMenu">
-		select * from SYS_MENU
+	<select id="findUserMenus" parameterType="java.lang.String" resultMap="sysMenu">
+		select distinct a.* 
+		from SYS_MENU a 
+		inner join SYS_RM b on a.id = b.menu_id
+		inner join SYS_RU c on b.role_id = c.role_id 
+		and c.user_id=#{_parameter} 
+		order by a.orderno
 	</select>
+	
+	<select id="findAllMenus" parameterType="java.lang.String" resultMap="sysMenu">
+		select * from SYS_MENU
+		 where 1=1
+	    <if test="_parameter!=null">
+	        and name like concat(concat('%', #{_parameter}), '%')
+	    </if>
+		 order by orderno
+	</select>
+	
+	<select id="findMenuByname" parameterType="java.lang.String" resultMap="sysMenu">
+	    select * from SYS_MENU 
+	    where 1=1
+	    <if test="_parameter!=null">
+	        and name=#{_parameter}
+	    </if>
+	</select>
+	
+	<insert id="addMenu" parameterType="java.util.Map" flushCache="false">
+	    insert into SYS_MENU (
+			id,
+			name,
+			pid,
+			orderno,
+			url
+	    ) values(
+			#{id},
+			#{name},
+			#{pid},
+			#{orderno},
+			#{url}
+	    )
+	</insert>
+	
+	<update id="editMenu" parameterType="java.util.Map" flushCache="false">
+	    update SYS_MENU set
+	    name=#{name},
+	    pid=#{pid},
+	    orderno=#{orderno},
+	   	url=#{url}
+	    where id=#{id}
+	</update>
+	
+	<delete id="rmvMenu" parameterType="java.util.Map" flushCache="false">
+	    delete from SYS_MENU
+	    where id=#{id}
+	</delete>
+	
+	<delete id="rmvSubMenus" parameterType="java.util.Map" flushCache="false">
+	    delete from SYS_MENU
+	    where pid=#{id}
+	</delete>
+	
+	<update id="sortMenu" parameterType="java.util.Map" flushCache="false">
+	    update SYS_MENU set
+	    pid=#{pid},
+	    orderno=#{orderno}
+	    where id=#{id}
+	</update>
 
 </mapper>

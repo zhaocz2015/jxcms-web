@@ -13,10 +13,10 @@
 			<h2>进销存管理系统</h2>
 
 			<div class="account-input">
-				<input id="loginname" placeholder="用户名" name="loginname" />
+				<input id="loginname" placeholder="用户名" name="loginname" value="admin"/>
 			</div>
 			<div class="account-input">
-				<input id="password" type="password" placeholder="密码" name="password" />
+				<input id="password" type="password" placeholder="密码" name="password" value="1"/>
 			</div>
 			<div class="account-input captcha">
 				<input id="captcha" placeholder="验证码" name="captcha" /> <img src="static/images/kaptcha.jpg" onclick="refresh(this)" />

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DicMapper">
+
+ 	<resultMap type="Dic" id="sysDic">
+		<id column="id" property="id"/>
+		<result column="code" property="code"/>
+		<result column="name" property="name"/>
+	</resultMap>
+
+ 	<resultMap type="DicItem" id="sysDicItem">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="val" property="val"/>
+	</resultMap>
+	
+	<select id="findDics" parameterType="java.util.Map" resultMap="sysDic">
+		select * from SYS_DIC
+		<if test="code!=null">
+		    and code like concat(concat('%', #{code}), '%')
+		</if>
+		<if test="name!=null">
+		    and name like concat(concat('%', #{name}), '%')
+		</if>
+	</select>
+	
+	<insert id="addDic" parameterType="java.util.Map" flushCache="false">
+	    insert into SYS_DIC (
+			id,
+			code,
+			name
+	    ) values(
+			#{id},
+			#{code},
+			#{name}
+	    )
+	</insert>
+	
+	<update id="editDic" parameterType="java.util.Map" flushCache="false">
+	    update SYS_DIC set
+	    code=#{code},
+	    name=#{name}
+	    where id=#{id}
+	</update>
+	
+	<delete id="rmvDic" parameterType="java.util.Map" flushCache="false">
+	    delete from SYS_DIC
+	    where id=#{id}
+	</delete>
+	
+	<select id="findItemsByDic" parameterType="java.lang.String" resultMap="sysDicItem">
+		select * from SYS_DIC_ITEM
+		where dic_id=#{_parameter}
+	</select>
+	
+	<insert id="addDicItem" parameterType="java.util.Map" flushCache="false">
+	    insert into SYS_DIC_ITEM (
+			id,
+			code,
+			name
+	    ) values(
+			#{id},
+			#{code},
+			#{name}
+	    )
+	</insert>
+	
+	<update id="editDicItem" parameterType="java.util.Map" flushCache="false">
+	    update SYS_DIC_ITEM set
+	    code=#{code},
+	    name=#{name}
+	    where id=#{id}
+	</update>
+	
+	<delete id="rmvDicItem" parameterType="java.util.Map" flushCache="false">
+	    delete from SYS_DIC_ITEM
+	    where id=#{id}
+	</delete>
+
+</mapper>

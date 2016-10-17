@@ -14,6 +14,11 @@
     <typeAliases>
         <typeAlias alias="User" type="com.zcz.web.sys.user.entity.SysUser"/>
         <typeAlias alias="Menu" type="com.zcz.web.sys.menu.entity.SysMenu"/>
+        <typeAlias alias="Role" type="com.zcz.web.sys.role.entity.SysRole"/>
+        <typeAlias alias="RU" type="com.zcz.web.sys.role.entity.SysRU"/>
+        <typeAlias alias="RM" type="com.zcz.web.sys.role.entity.SysRM"/>
+        <typeAlias alias="Dic" type="com.zcz.web.sys.dic.entity.SysDic"/>
+        <typeAlias alias="DicItem" type="com.zcz.web.sys.dic.entity.SysDicItem"/>
     </typeAliases>
     
     <plugins>

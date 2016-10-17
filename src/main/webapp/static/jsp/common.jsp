@@ -9,9 +9,11 @@
 <link rel="stylesheet" href="static/easyui/1.5/themes/icon.css" />
 <link rel="stylesheet" href="static/easyui/1.5/themes/color.css" />
 <link rel="stylesheet" href="static/css/common.css" />
+<link rel="stylesheet" href="static/css/style.css" />
 <script type="text/javascript" src="static/easyui/1.5/jquery.min.js"></script>
 <script type="text/javascript" src="static/easyui/1.5/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="static/easyui/1.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="static/easyui/ext/jquery.easyui.treegrid.dnd.js"></script>
 <script type="text/javascript" src="static/js/easyui.ext.js"></script>
 <script type="text/javascript" src="static/js/util.js"></script>
 <script type="text/javascript" src="static/js/common.js"></script>

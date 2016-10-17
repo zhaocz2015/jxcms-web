@@ -29,7 +29,9 @@ public class UserService {
 	}
 
 	public RsPage findUsersByPage(Map<String, Object> params) throws Exception {
-		return dao.findForPage("UserMapper.findUsersByPage", params, new RowBounds(0, 15));
+		int pageIndex = Integer.valueOf((String) params.get("page"));
+		int pageSize = Integer.valueOf((String) params.get("rows"));
+		return dao.findForPage("UserMapper.findUsersByPage", params, new RowBounds(pageIndex, pageSize));
 	}
 
 	public void addUser(SysUser user) throws Exception {

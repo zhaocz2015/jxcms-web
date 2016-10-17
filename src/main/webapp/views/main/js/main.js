@@ -1,37 +1,26 @@
 /**
- * 加载页面初始化jQuery脚本
+ *  main.js
  */
 $(function() {
-	// 初始化加载菜单树
-	initMenuTree();
+	//导航切换
+	$(".menuson li").click(function(){
+		$(".menuson li.active").removeClass("active")
+		$(this).addClass("active");
+	});
+	
+	$('.title').click(function(){
+		var $ul = $(this).next('ul');
+		$('dd').find('ul').slideUp();
+		if($ul.is(':visible')){
+			$(this).next('ul').slideUp();
+		}else{
+			$(this).next('ul').slideDown();
+		}
+	});
 	
 	// 绑定上下文菜单
 	bindContextMenuEvnets();
 });
-
-function initMenuTree(){
-	$("#menuTree").tree({
-		animate: true,
-		url: "menuTree",
-		onSelect: function(node){
-			openMenuTab(node.id, node.text, node.url);
-		}
-	});
-}
-
-function logout(){
-    $.messager.confirm('提示','确定要退出?',function(r){
-        if (r){
-            progressLoad();
-            $.post('logout', function(rs) {
-                if(rs.success){
-                    progressClose();
-                    window.location.href='login';
-                }
-            }, 'json');
-        }
-    });
-}
 
 function openMenuTab(mID, mTitle, mUrl){
 	if($("#tabs").tabs("exists", mTitle)){
@@ -81,7 +70,6 @@ function bindTabMenuEvents() {
 		return false;
 	});
 }
-
 
 /**
  * 绑定右键菜单事件
@@ -172,3 +160,16 @@ function bindContextMenuEvnets() {
 	});
 }
 
+function logout(){
+    $.messager.confirm('提示','确定要退出?',function(r){
+        if (r){
+            progressLoad();
+            $.post('logout', function(rs) {
+                if(rs.success){
+                    progressClose();
+                    window.location.href='login';
+                }
+            }, 'json');
+        }
+    });
+}

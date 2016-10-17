@@ -10,18 +10,24 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.zcz.web.core.base.BaseController;
 import com.zcz.web.core.exception.CaptchaException;
 import com.zcz.web.core.shiro.UserCaptchaToken;
 import com.zcz.web.core.utils.StringUtil;
+import com.zcz.web.sys.menu.service.MenuService;
 
 @Controller
 public class LoginController extends BaseController {
+
+	@Autowired
+	MenuService menuService;
 
 	@RequestMapping("/login")
 	public String login() {
@@ -29,13 +35,14 @@ public class LoginController extends BaseController {
 		if (SecurityUtils.getSubject().isAuthenticated()) {
 			return "main/main";
 		}
-		return "login2";
+		return "login";
 	}
 
 	@RequestMapping("/main")
-	public String main() {
-		logger.info("主页面");
-		return "main/main";
+	public ModelAndView main() throws Exception {
+		ModelAndView mav = new ModelAndView("main/main");
+		mav.addObject("menus", menuService.getMenuTree(false, getUserId()));
+		return mav;
 	}
 
 	@RequestMapping("/login_login")

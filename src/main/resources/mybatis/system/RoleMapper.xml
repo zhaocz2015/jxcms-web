@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RoleMapper">
+
+	<resultMap type="Role" id="role">
+		<id column="id" property="id" />
+		<result column="name" property="name" />
+	</resultMap>
+
+	<select id="findRolesByPage" parameterType="java.util.Map"
+		resultMap="role">
+		select * from SYS_ROLE
+		where 1=1
+		<if test="name!=null">
+			and name like concat(concat('%', #{name}), '%')
+		</if>
+	</select>
+
+	<insert id="addRole" parameterType="java.util.Map" flushCache="false">
+		insert into SYS_ROLE(
+		id,
+		name
+		)
+		values(
+		#{id},
+		#{name}
+		)
+	</insert>
+
+	<update id="editRole" parameterType="java.util.Map" flushCache="false">
+		update SYS_ROLE set
+		name=#{name}
+		where id=#{id}
+	</update>
+
+	<delete id="rmvRole" parameterType="java.util.Map">
+		delete from SYS_ROLE
+		where
+		id=#{id}
+	</delete>
+
+	<delete id="rmvRUs" parameterType="java.util.Map">
+		delete from SYS_RU_RLT
+		where
+		role_id=#{id}
+	</delete>
+
+	<delete id="rmvRMs" parameterType="java.util.Map">
+		delete from SYS_RU_RLT
+		where
+		role_id=#{id}
+	</delete>
+
+	<!-- 授权用户 -->
+	<select id="findRUsByRole" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		select 
+		t.id as user_id, t.loginname,  t.username,
+		(
+			select 
+				id 
+			from SYS_RU
+			where 1=1
+			and role_id=#{id} and user_id=t.id
+		) as ru_id
+		from SYS_USER t
+	</select>
+
+	<insert id="addRU" parameterType="java.util.Map" flushCache="false">
+		insert into SYS_RU(
+		id,
+		role_id,
+		user_id
+		)
+		values(
+		#{id},
+		#{roleId},
+		#{userId}
+		)
+	</insert>
+
+	<delete id="rmvRU" parameterType="java.util.Map">
+		delete from SYS_RU
+		where
+		id=#{id}
+	</delete>
+
+	<!-- 授权菜单 -->
+	<select id="findRMsByRole" parameterType="java.lang.String"
+		resultType="java.util.Map">
+		select 
+		t.id as menu_id, t.name,  t.url, t.pid,
+		(
+			select 
+				id 
+			from SYS_RM
+			where 1=1
+			and role_id=#{_parameter} and menu_id=t.id
+		) as rm_id
+		from SYS_MENU t
+		order by t.orderno
+	</select>
+
+	<insert id="addRM" parameterType="java.util.Map" flushCache="false">
+		insert into SYS_RM(
+		id,
+		role_id,
+		menu_id
+		)
+		values(
+		#{id},
+		#{roleId},
+		#{menuId}
+		)
+	</insert>
+
+	<delete id="rmvRM" parameterType="java.util.Map">
+		delete from SYS_RM
+		where
+		id=#{id}
+	</delete>
+
+
+</mapper>
