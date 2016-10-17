@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ProvMapper">
+	
+	<select id="findProvsByPage" parameterType="java.util.Map" resultType="java.util.Map">
+	    select * from JXC_PROVIDER
+	    where 1=1
+	    <if test="code!=null">
+	        and code like concat(concat('%', #{code}), '%')
+	    </if>
+	    <if test="name!=null">
+	        and name like concat(concat('%', #{name}), '%')
+	    </if>
+	</select>
+
+	<insert id="addProv" parameterType="java.util.Map" flushCache="false">
+	    insert into JXC_PROVIDER(
+	    	id,
+	    	code,
+	    	name,
+	    	addr,
+	    	telno,
+	    	phone,
+	    	qq,
+	    	email,
+	    	linkman,
+	    	xkzh
+	    )
+	    values(
+	    	#{id},
+	    	#{code},
+	    	#{name},
+	    	#{addr},
+	    	#{telno},
+	    	#{phone},
+	    	#{qq},
+	    	#{email},
+	    	#{linkman},
+	    	#{xkzh}
+	    )
+	</insert>
+	
+	<update id="editProv" parameterType="java.util.Map" flushCache="false">
+	    update JXC_PROVIDER set
+	    name=#{name},
+	    addr=#{addr},
+	    telno=#{telno},
+	    phone=#{phone},
+	    qq=#{qq},
+	    email=#{email},
+	    linkman=#{linkman}
+	    where id=#{id}
+	</update>
+	
+	<delete id="rmvProv" parameterType="java.util.Map">
+	    delete from JXC_PROVIDER
+	    where id=#{id}
+	</delete>
+	
+</mapper>
